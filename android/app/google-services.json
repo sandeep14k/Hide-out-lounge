@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23172332199",
+    "project_id": "hideoutlounge-a36d2",
+    "storage_bucket": "hideoutlounge-a36d2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23172332199:android:e97459e6ac8f59163cf982",
+        "android_client_info": {
+          "package_name": "com.example.hide_out_lounge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd1cqTcyKR8IjocushMhCOLVTevTxfbVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
