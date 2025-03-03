@@ -89,7 +89,7 @@ class _ProfileState extends State<Profile> {
                           height: MediaQuery.of(context).size.height / 4.3,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: const Color.fromARGB(255, 199, 41, 41),
                               borderRadius: BorderRadius.vertical(
                                   bottom: Radius.elliptical(
                                       MediaQuery.of(context).size.width,
@@ -171,7 +171,7 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Icon(
                                 Icons.person,
-                                color: Colors.black,
+                                color: const Color.fromARGB(255, 219, 52, 52),
                               ),
                               SizedBox(
                                 width: 20.0,
@@ -220,7 +220,7 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Icon(
                                 Icons.email,
-                                color: Colors.black,
+                                color: const Color.fromARGB(255, 212, 61, 61),
                               ),
                               SizedBox(
                                 width: 20.0,
@@ -269,7 +269,7 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Icon(
                                 Icons.description,
-                                color: Colors.black,
+                                color: const Color.fromARGB(255, 207, 42, 42),
                               ),
                               SizedBox(
                                 width: 20.0,
@@ -315,7 +315,7 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Icon(
                                   Icons.delete,
-                                  color: Colors.black,
+                                  color: const Color.fromARGB(255, 208, 42, 42),
                                 ),
                                 SizedBox(
                                   width: 20.0,
@@ -362,7 +362,7 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Icon(
                                   Icons.logout,
-                                  color: Colors.black,
+                                  color: const Color.fromARGB(255, 212, 25, 25),
                                 ),
                                 SizedBox(
                                   width: 20.0,

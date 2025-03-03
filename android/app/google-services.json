@@ -7,9 +7,47 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:23172332199:android:4b8baaa70873475b3cf982",
+        "android_client_info": {
+          "package_name": "com.example.admin_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd1cqTcyKR8IjocushMhCOLVTevTxfbVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:23172332199:android:e97459e6ac8f59163cf982",
         "android_client_info": {
           "package_name": "com.example.hide_out_lounge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd1cqTcyKR8IjocushMhCOLVTevTxfbVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23172332199:android:41276331a50cbc2a3cf982",
+        "android_client_info": {
+          "package_name": "com.pixelCrafters.hide_out_lounge"
         }
       },
       "oauth_client": [],

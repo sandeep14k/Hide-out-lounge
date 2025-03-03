@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hide_out_lounge/pages/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -25,6 +26,8 @@ class AuthMethods {
       await prefs.remove('userName');
       await prefs.remove('userId');
       
+     
+
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Signup()));
     } catch (e) {

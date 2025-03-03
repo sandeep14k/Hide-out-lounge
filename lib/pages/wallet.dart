@@ -14,7 +14,7 @@ class _WalletState extends State<Wallet> {
       appBar: AppBar(
         title: const Text("Wallet",style: TextStyle(color: Colors.white),),
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 212, 42, 42),
       ),
       body: Center(
         child: Column(

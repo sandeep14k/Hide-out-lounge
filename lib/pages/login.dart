@@ -7,14 +7,13 @@ import 'package:hide_out_lounge/service/shared_prefrence.dart';
 import 'package:hide_out_lounge/widget/widget_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class Login extends StatefulWidget {
   const Login({super.key});
-
   @override
   State<Login> createState() => _LoginState();
 }
-
 class _LoginState extends State<Login> {
   bool isLoading = false;
 
@@ -31,7 +30,16 @@ class _LoginState extends State<Login> {
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email.toLowerCase(), password: password);
     User? user = userCredential.user;
+    final fcmToken = await FirebaseMessaging.instance.getToken();
 
+      // Save the token in Firestore
+      final userId = userCredential.user?.uid;
+      if (userId != null && fcmToken != null) {
+        await FirebaseFirestore.instance.collection('users').doc(userId).update({
+          'fcmTokens': FieldValue.arrayUnion([fcmToken]),
+        });
+      }
+    
     if (user != null) {
       // Save user token securely in SharedPreferences
       String idToken = (await user.getIdToken()) ?? '';

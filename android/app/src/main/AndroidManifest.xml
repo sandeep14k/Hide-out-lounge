@@ -1,9 +1,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hide_out_lounge">
+xmlns:tools="http://schemas.android.com/tools"
+    package="com.pixelCrafters.hide_out_lounge">
+    <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.WAKE_LOCK"/>
+<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<uses-feature android:name="android.hardware.location.gps"/>
     <application
         android:label="Hide Out Lounge"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- <meta-data
+    android:name="com.razorpay.ApiKey"
+    android:value="YOUR_API_KEY"/> -->
+       <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="high_importance_channel" />
+       <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCl9QS06TsVt0JvdUueFVsJ5nV4fF9SXcY"/> 
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,6 +49,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -42,5 +62,14 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+          <package android:name="com.google.android.apps.nbu.paisa.user" />
+  <package android:name="in.org.npci.upiapp" />
+  <package android:name="net.one97.paytm" />
+  <package android:name="com.phonepe.app" />
     </queries>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.VIBRATE" />
+
 </manifest>
+
+

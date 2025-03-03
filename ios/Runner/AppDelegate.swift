@@ -10,4 +10,11 @@ import UIKit
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+  if #available(iOS 10.0, *) {
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+        print("Permission granted: \(granted)")
+    }
+    application.registerForRemoteNotifications()
 }
+}
+

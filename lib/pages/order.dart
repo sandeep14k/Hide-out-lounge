@@ -50,7 +50,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Order History",style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 196, 33, 33),
       ),
       body: userId == null
           ? const Center(child: CircularProgressIndicator())

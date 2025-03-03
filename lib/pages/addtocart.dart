@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hide_out_lounge/pages/address.dart';
 import 'package:hide_out_lounge/pages/bill.dart';
 import 'package:hide_out_lounge/widget/widget_support.dart';
@@ -44,6 +44,58 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  Future<void> updateQuantity(String itemId, int newQuantity) async {
+  try {
+    if (newQuantity < 1) {
+      // If quantity is less than 1, remove the item from the cart
+      await removeItem(itemId);
+      return;
+    }
+
+    // Fetch the item to get the price per unit
+    final itemDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .collection('cart')
+        .doc(itemId)
+        .get();
+
+    final itemData = itemDoc.data() as Map<String, dynamic>? ?? {};
+    // Fetch the Price as a number
+final total = int.tryParse(itemData['Total']?.toString() ?? '0') ?? 0;
+final quantity = int.tryParse(itemData['Quantity']?.toString() ?? '1') ?? 1; // Avoid division by zero
+
+final pricePerUnit = total ~/ quantity;
+print(pricePerUnit);   
+    // Ensure this is a number
+
+    // Debug logs
+  
+    debugPrint("Price per unit: $pricePerUnit");
+    debugPrint("New quantity: $newQuantity");
+
+    // Calculate the new total
+    final newTotal = pricePerUnit * newQuantity;
+
+    // Debug log for new total
+    debugPrint("New total: $newTotal");
+
+    // Update the quantity and total in Firestore
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.userId)
+        .collection('cart')
+        .doc(itemId)
+        .update({
+      'Quantity': newQuantity,
+      'Total': newTotal,
+    });
+
+    fetchCartItems();
+  } catch (e) {
+    debugPrint("Error updating quantity: $e");
+  }
+}
   Future<void> removeItem(String itemId) async {
     try {
       await FirebaseFirestore.instance
@@ -74,7 +126,7 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         title: const Text("My Cart", style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: const Color.fromARGB(255, 4, 4, 4),
+        backgroundColor: const Color.fromARGB(255, 205, 51, 51),
       ),
       body: cartItems == null
           ? const Center(child: CircularProgressIndicator())
@@ -90,39 +142,72 @@ class _CartPageState extends State<CartPage> {
                         cartItems![index].data() as Map<String, dynamic>? ?? {};
                     final imageUrl = item['Image'] ?? '';
                     final name = item['Name'] ?? 'Unknown';
-                    final quantity = item['Quantity'] ?? 0;
+                    final quantity = int.tryParse(item['Quantity'].toString()) ?? 0; // Safely parse to int
                     final total = item['Total'] ?? 0;
 
                     return Card(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10.0),
-                      child: ListTile(
-                        leading: Image.network(
-                          imageUrl,
-                          width: 60.0,
-                          height: 60.0,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error),
-                        ),
-                        title: Text(name,
-                            style: AppWidget.semiBoldTextFeildStyle()),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      elevation: 5.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
                           children: [
-                            Text(
-                              "Quantity: $quantity",
-                              style: AppWidget.LightTextFeildStyle(),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                width: 80.0,
+                                height: 80.0,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
                             ),
-                            Text(
-                              "Total: ₹$total",
-                              style: AppWidget.LightTextFeildStyle(),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(name,
+                                      style:
+                                          AppWidget.semiBoldTextFeildStyle()),
+                                  const SizedBox(height: 5.0),
+                                  Text(
+                                    "Total: ₹$total",
+                                    style: AppWidget.LightTextFeildStyle(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    updateQuantity(
+                                        cartItems![index].id, quantity - 1);
+                                  },
+                                ),
+                                Text("$quantity",
+                                    style: AppWidget.semiBoldTextFeildStyle()),
+                                IconButton(
+                                  icon: const Icon(Icons.add,
+                                      color: Colors.green),
+                                  onPressed: () {
+                                    updateQuantity(
+                                        cartItems![index].id, quantity + 1);
+                                  },
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => removeItem(cartItems![index].id),
                         ),
                       ),
                     );
@@ -133,7 +218,7 @@ class _CartPageState extends State<CartPage> {
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color.fromARGB(255, 189, 42, 42),
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                 ),
                 onPressed: () async {
@@ -162,7 +247,7 @@ class _CartPageState extends State<CartPage> {
                 },
                 child: const Text(
                   "Proceed to Checkout",
-                  style: TextStyle(fontSize: 18.0, fontFamily: 'Poppins'),
+                  style: TextStyle(fontSize: 18.0, fontFamily: 'Poppins',color: Colors.white),
                 ),
               ),
             )

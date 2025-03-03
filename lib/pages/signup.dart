@@ -8,6 +8,8 @@ import 'package:hide_out_lounge/widget/widget_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -25,28 +27,35 @@ class _SignupState extends State<Signup> {
   TextEditingController mailcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
+   
 
   registration() async {
   try {
     UserCredential userCredential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
+        
     String Id = randomAlphaNumeric(10);
+    String? fcmTokens = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> addUserInfo = {
       "Name": namecontroller.text,
       "Email": mailcontroller.text.toLowerCase(),
       "Wallet": "0",
       "Id": Id,
+      "fcmTokens":fcmTokens,
     };
     User? user = userCredential.user;
     if (user != null) {
+       
       // Save user token securely in SharedPreferences
       String idToken = (await user.getIdToken()) ?? '';
-
+    
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('idToken', idToken);
       await prefs.setString('userEmail', user.email!); // Optional
     }
+   
     await DatabaseMethods().addUserDetail(addUserInfo, Id);
+    
     await SharedPreferenceHelper().saveUserName(namecontroller.text);
     await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
     await SharedPreferenceHelper().saveUserWallet('0');
